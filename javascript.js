@@ -1,5 +1,20 @@
 let playerScore = 0
 let computerScore = 0
+let winner
+const buttons = document.querySelectorAll('input')
+
+function reload(winner){
+    alert(`${winner} won`);
+    location.reload();
+}
+
+
+buttons.forEach(button =>{
+    button.addEventListener('click', function(){
+        playerChoice = button.value
+        playRound(button.value)
+    })
+})
 
 function computerPlay() {
     let optionsList = ["rock", "paper", "scissors"];
@@ -8,54 +23,46 @@ function computerPlay() {
   }
 
 function playRound(playerChoice, computerChoice) {
-    playerChoice = prompt('Rock, Paper or scissors?').toLowerCase();
     computerChoice = computerPlay()
 
-    if (playerChoice == 'rock' && computerChoice == 'scissors') {
-        playerScore++
-        return alert(`Congrats! Rock beats scissors, you win! \n\nThe score is ${playerScore}-${computerScore}`)
-    } else if (computerChoice == 'paper') {
-        computerScore++
-        return alert(`Sorry! Paper beats rock, you lose! \n\nThe score is ${playerScore}-${computerScore}`)
-    } else if (computerChoice == 'rock') {
-        return alert(`It\'s a tie! \n\nThe score is ${playerScore}-${computerScore}`)
+    //Tie Condition
+    if (playerChoice == computerChoice){
+        result = (`It's a tie, you both chose ${playerChoice}` + `<br><br>Player score: ${playerScore} <br>Computer score: ${computerScore}`)  
     }
 
-    if (playerChoice == 'paper' && computerChoice == 'rock') {
-        playerScore++
-        return alert(`Congrats! Paper beats rock, you win! \n\nThe score is ${playerScore}-${computerScore}`) 
-    } else if (computerChoice == 'scissors') {
-        computerScore++
-        return alert(`Sorry! Scissors beats paper, you lose! \n\nThe score is ${playerScore}-${computerScore}`)
-    } else if (computerChoice == 'paper') {
-        return alert(`It\'s a tie! \n\nThe score is ${playerScore}-${computerScore}`)
+    //Win  Condition
+    else if ((playerChoice == 'rock' && computerChoice == 'scissors') ||
+    (playerChoice == 'scissors' && computerChoice == 'paper') ||
+    (playerChoice == 'paper' && computerChoice == 'rock')) {
+    playerScore++
+    result = (`You won, ${playerChoice} beats ${computerChoice}` + `<br><br>Player score: ${playerScore} <br>Computer score: ${computerScore}`)
+
+        if (playerScore == 5){
+        winner = "you"
+        reload(winner)
+        } 
+    }  
+
+    //Lose Condition
+    else {
+    computerScore++
+    result = (`You lost, ${computerChoice} beats ${playerChoice}` + `<br><br>Player score: ${playerScore} <br>Computer score: ${computerScore}`)  
+
+        if (computerScore == 5){
+            winner = 'computer'
+        reload(winner)   
+        }
     }
 
-    if (playerChoice == 'scissors' && computerChoice == 'paper') {
-        playerScore++
-        return alert(`Congrats! Scissors beats paper, you win! \n\nThe score is ${playerScore}-${computerScore}`)
-    } else if (computerChoice == 'rock') {
-        computerScore++
-        return alert(`Sorry! Rock beats scissors, you lose! \n\nThe score is ${playerScore}-${computerScore}`)
-    } else if (computerChoice == 'scissors') {
-        return alert(`It\'s a tie! \n\nThe score is ${playerScore}-${computerScore}`)
-    }
+    document.getElementById("score").innerHTML = result 
 
+    return
 }
 
-function game() {
-    for (let i = 0; i < 5; i++) {
-        console.log(playRound())
-    }
 
-    if (playerScore > computerScore) {
-        alert(`You are a winner! \n\nThe final score was  ${playerScore}-${computerScore}`)
-    } else if (playerScore < computerScore) {
-        alert(`You are a loser! \n\nThe final score was ${playerScore}-${computerScore}`)
-    } else {
-        alert(`It\s a tie! \n\nThe final score was ${playerScore}-${computerScore}`)
-    }
 
-    playerScore = 0
-    computerScore = 0
-}
+
+
+
+
+  
